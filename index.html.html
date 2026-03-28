@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>דאשבורד צדק ארגוני — חדרי שיח</title>
+<link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --purple:#3C3489;--purple-l:#EEEDFE;--purple-m:#534AB7;
+  --teal:#085041;--teal-l:#E1F5EE;--teal-m:#0F6E56;
+  --coral:#712B13;--coral-l:#FAECE7;--coral-m:#993C1D;
+  --blue:#0C447C;--blue-l:#E6F1FB;--blue-m:#185FA5;
+  --ink:#1a1a2e;--paper:#f7f6f2;--white:#fff;
+  --border:#e0ddd6;--border2:#c8c5bc;
+  --text:#1a1a1a;--text2:#555;--text3:#888;
+  --ok-bg:#EAF3DE;--ok-tx:#27500A;--ok-b:#3B6D11;
+  --no-bg:#FCEBEB;--no-tx:#791F1F;--no-b:#A32D2D;
+  --r:10px;--rl:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Assistant',sans-serif;background:var(--paper);color:var(--text);direction:rtl}
+
+.app-header{background:#0d0b1f;padding:.875rem 1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;border-bottom:2px solid #534AB7}
+.app-header h1{color:#ffffff;font-size:17px;font-weight:700;letter-spacing:-.2px;margin:0}
+.app-header .tagline{color:#c4c0f0;font-size:12px;margin-top:3px;font-weight:400}
+.app-header-left{text-align:left;direction:ltr;border-left:1px solid #2d2a50;padding-left:14px}
+.app-header-left .instructor{color:#ffffff;font-size:13px;font-weight:600}
+.app-header-left .course{color:#a09bc8;font-size:11px;margin-top:3px}
+
+.main{max-width:940px;margin:0 auto;padding:1.25rem 1rem 3rem}
+
+.tabs-wrap{display:flex;gap:6px;margin-bottom:1.25rem;flex-wrap:wrap}
+.tab-btn{padding:7px 15px;font-size:13px;font-family:'Assistant',sans-serif;font-weight:500;border:1px solid var(--border2);border-radius:20px;background:var(--white);color:var(--text2);cursor:pointer;transition:all .18s}
+.tab-btn:hover{background:var(--paper)}
+.tab-btn.active{color:#fff;border-color:transparent}
+.panel{display:none}.panel.active{display:block}
+
+.case-hd{border-radius:var(--rl);padding:1rem 1.25rem;margin-bottom:1rem}
+.case-hd h2{font-size:18px;font-weight:600;margin-bottom:2px}
+.case-hd .sub{font-size:12px;opacity:.75;margin-bottom:6px}
+.dim-tag{display:inline-block;font-size:11px;font-weight:600;padding:3px 12px;border-radius:20px}
+
+.card{background:var(--white);border:1px solid var(--border);border-radius:var(--rl);padding:1rem 1.25rem;margin-bottom:1rem}
+.sec-lbl{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.65rem}
+
+.mg{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.fw{display:flex;flex-direction:column;gap:3px}
+.fw label{font-size:11px;color:var(--text3)}
+.mg input{width:100%;padding:7px 10px;font-size:13px;font-family:'Assistant',sans-serif;border:1px solid var(--border);border-radius:8px;background:var(--paper);color:var(--text);text-align:right;direction:rtl;transition:border .15s;height:36px}
+.mg input:focus{outline:none;border-color:#7F77DD}
+
+.bg-box{border-radius:8px;padding:.875rem 1rem;font-size:13.5px;line-height:1.8}
+
+.oq{margin-bottom:.75rem}
+.oq label{font-size:13.5px;font-weight:500;display:block;margin-bottom:5px;line-height:1.5}
+.oq textarea{width:100%;min-height:66px;padding:8px 10px;font-size:13px;font-family:'Assistant',sans-serif;border:1px solid var(--border);border-radius:8px;background:var(--paper);color:var(--text);resize:vertical;text-align:right;direction:rtl;line-height:1.6}
+.oq textarea:focus{outline:none;border-color:#7F77DD}
+
+/* yes/no radio */
+.yn-wrap{display:flex;gap:10px;margin-top:6px}
+.yn-opt{display:flex;align-items:center;gap:6px;padding:6px 14px;border:1px solid var(--border);border-radius:20px;cursor:pointer;font-size:13px;transition:background .15s;background:var(--white)}
+.yn-opt:hover{background:var(--paper)}
+.yn-opt input{accent-color:#534AB7}
+.yn-opt.yes-sel{background:#EAF3DE;border-color:var(--ok-b);color:var(--ok-tx);font-weight:500}
+.yn-opt.no-sel{background:var(--no-bg);border-color:var(--no-b);color:var(--no-tx);font-weight:500}
+.yn-reason{margin-top:8px}
+
+.sb-row{display:flex;justify-content:space-between;font-size:12px;color:var(--text3);margin-bottom:5px}
+.pt{height:4px;background:var(--border);border-radius:2px;margin-bottom:1.25rem;overflow:hidden}
+.pf{height:100%;border-radius:2px;transition:width .4s}
+
+.mcq{margin-bottom:1rem}
+.mcq .qt{font-size:14px;font-weight:500;margin-bottom:.6rem;line-height:1.6}
+.opts{display:flex;flex-direction:column;gap:6px}
+.opt{display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border:1px solid var(--border);border-radius:8px;cursor:pointer;background:var(--white);transition:background .15s}
+.opt:hover{background:var(--paper)}
+.opt input[type=radio]{margin-top:3px;flex-shrink:0;accent-color:#534AB7}
+.opt span{font-size:13.5px;line-height:1.5}
+.opt.correct{background:var(--ok-bg);border-color:var(--ok-b)}
+.opt.correct span{color:var(--ok-tx)}
+.opt.wrong{background:var(--no-bg);border-color:var(--no-b)}
+.opt.wrong span{color:var(--no-tx)}
+.opt.shown{background:var(--paper);border-color:var(--border2)}
+.fb{margin-top:8px;padding:9px 12px;border-radius:8px;font-size:13px;line-height:1.65;display:none}
+.fb.c{background:var(--ok-bg);color:var(--ok-tx);display:block}
+.fb.w{background:var(--no-bg);color:var(--no-tx);display:block}
+.chk{margin-top:9px;padding:6px 16px;font-size:13px;font-family:'Assistant',sans-serif;font-weight:500;border:1px solid var(--border2);border-radius:8px;background:var(--white);color:var(--text);cursor:pointer}
+.chk:hover{background:var(--paper)}
+.chk:disabled{opacity:.35;cursor:default}
+.div{border:none;border-top:1px solid var(--border);margin:.875rem 0}
+
+.anc{font-size:14px;font-style:italic;color:var(--text);line-height:1.75;margin-bottom:.75rem;padding-right:12px;border-right:3px solid var(--border2)}
+
+/* shared mini-legend */
+.dim-leg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-bottom:1rem}
+.dp{padding:5px 9px;border-radius:7px;font-size:12px;display:flex;align-items:center;gap:6px}
+.dp .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+/* export area */
+.export-section{background:var(--white);border:1px solid var(--border);border-radius:var(--rl);padding:1rem 1.25rem;margin-bottom:1rem}
+.export-section h3{font-size:14px;font-weight:500;margin-bottom:.5rem}
+.export-section p{font-size:13px;color:var(--text2);margin-bottom:.75rem;line-height:1.6}
+.exp-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 18px;font-size:13px;font-family:'Assistant',sans-serif;font-weight:500;background:var(--ink);color:#e8e6ff;border:none;border-radius:8px;cursor:pointer;transition:opacity .2s}
+.exp-btn:hover{opacity:.88}
+.exp-btn svg{width:14px;height:14px}
+
+/* hidden export template */
+#export-out{display:none}
+
+@media(max-width:580px){.mg{grid-template-columns:repeat(2,minmax(0,1fr))}.dim-leg{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="app-header">
+  <div class="app-header-right">
+    <h1>דאשבורד עבודת קבוצה | חדר שיח</h1>
+    <div class="tagline">צדק ארגוני — בחרו את המקרה שהוקצה לקבוצתכם ועבדו יחד</div>
+  </div>
+  <div class="app-header-left">
+    <div class="instructor">ד"ר הדס הרמתי</div>
+    <div class="course">מבוא לניהול משאבי אנוש</div>
+  </div>
+</div>
+
+<div class="main">
+
+<div class="tabs-wrap" id="tabs">
+  <button class="tab-btn active" style="background:#3C3489;border-color:#3C3489;color:#fff" onclick="sw(0,this)">מקרה א׳ — גוגל</button>
+  <button class="tab-btn" onclick="sw(1,this)">מקרה ב׳ — Buffer</button>
+  <button class="tab-btn" onclick="sw(2,this)">מקרה ג׳ — משוב מנהל</button>
+  <button class="tab-btn" onclick="sw(3,this)">מקרה ד׳ — ועדת קידום</button>
+</div>
+
+<!-- ══════════════════════ CASE A ══════════════════════ -->
+<div class="panel active" id="p0">
+
+<div class="case-hd" style="background:#3C3489">
+  <h2 style="color:#EEEDFE">מקרה א׳ — פיטורי גוגל 2023</h2>
+  <div class="sub" style="color:#AFA9EC">דאשבורד עבודת קבוצה | חדר שיח</div>
+  <span class="dim-tag" style="background:#534AB7;color:#CECBF6">צדק אינפורמטיבי · Informational Justice</span>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שמות חברי הקבוצה</div>
+  <div class="mg">
+    <div class="fw"><label>משתתף/ת 1</label><input id="Am1" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 2</label><input id="Am2" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 3</label><input id="Am3" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 4</label><input id="Am4" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 5</label><input id="Am5" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 6</label><input id="Am6" placeholder="שם מלא"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">רקע המקרה</div>
+  <div class="bg-box" style="background:#EEEDFE;color:#3C3489">
+    בינואר 2023 פיטרה גוגל כ־12,000 עובדים — כ־6% מכוח האדם העולמי. עובדים רבים גילו שפוטרו רק כשניסו להיכנס לחשבונות החברה ומצאו שהגישה נחסמה. ההודעה נשלחה במייל אוטומטי. ה-CEO סאנדאר פיצ׳אי פרסם מכתב כללי, אך מנהלים ישירים לא קיבלו הכנה ולא ניתנה לעובדים הזדמנות לשאול שאלות.
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות פתוחות לדיון</div>
+
+  <div class="oq">
+    <label>1. האם פיטורים המוניים מסוג זה הם לגיטימיים מבחינה ארגונית ומוסרית?</label>
+    <div class="yn-wrap">
+      <label class="yn-opt" id="Ayn-yes"><input type="radio" name="Ayn" value="yes" onchange="ynSel('A','yes')"> כן</label>
+      <label class="yn-opt" id="Ayn-no"><input type="radio" name="Ayn" value="no" onchange="ynSel('A','no')"> לא</label>
+    </div>
+    <div class="yn-reason oq" id="Ayn-reason" style="display:none">
+      <label>נמקו את עמדת הקבוצה:</label>
+      <textarea id="Ayn-text" placeholder="כתבו את נימוקי הקבוצה..."></textarea>
+    </div>
+  </div>
+
+  <div class="oq"><label>2. מה בדיוק לא היה הוגן — גם אם ההחלטה לפטר כשלעצמה הייתה לגיטימית?</label><textarea id="Aoq1" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>3. מה הארגון יכול היה לעשות אחרת מבחינת ה"איך" — בלי לשנות את ה"מה"?</label><textarea id="Aoq2" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>4. איזה נזק ארגוני עלול לנבוע מהאופן שבו הפיטורים בוצעו, מעבר לנזק למפוטרים?</label><textarea id="Aoq3" placeholder="תשובת הקבוצה..."></textarea></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות רבות-ברירה — ספציפיות למקרה</div>
+  <div class="sb-row"><span id="Asl">0 מתוך 4 נכונות</span><span id="Asp">0%</span></div>
+  <div class="pt"><div class="pf" id="Apr" style="width:0%;background:#534AB7"></div></div>
+
+  <div class="mcq"><div class="qt">א. איזה עיקרון של צדק אינפורמטיבי הופר באופן הבולט ביותר כשהחברה חסמה את הגישה למערכות ללא הודעה מראש?</div>
+  <div class="opts" id="Ao1">
+    <label class="opt"><input type="radio" name="A1" value="0"><span>העובדים לא קיבלו פיצויים מספקים</span></label>
+    <label class="opt"><input type="radio" name="A1" value="1"><span>לא ניתנו הסברים ולא ניתנה הזדמנות לשאול שאלות</span></label>
+    <label class="opt"><input type="radio" name="A1" value="2"><span>הפיטורים לא אושרו על ידי ועד העובדים</span></label>
+    <label class="opt"><input type="radio" name="A1" value="3"><span>ההחלטה לא אושרה רגולטורית מבעוד מועד</span></label>
+  </div><button class="chk" onclick="chk('A',1,1,4)">בדקו תשובה</button><div class="fb" id="Afb1"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">ב. מה ההבדל בין צדק אינפורמטיבי לצדק אינטראקטיבי?</div>
+  <div class="opts" id="Ao2">
+    <label class="opt"><input type="radio" name="A2" value="0"><span>אין הבדל — שניהם עוסקים ביחסי מנהל-עובד</span></label>
+    <label class="opt"><input type="radio" name="A2" value="1"><span>אינפורמטיבי = תוצאות; אינטראקטיבי = תהליכים</span></label>
+    <label class="opt"><input type="radio" name="A2" value="2"><span>אינפורמטיבי = איכות ההסברים שניתנו; אינטראקטיבי = כבוד והתחשבות כלפי העובד</span></label>
+    <label class="opt"><input type="radio" name="A2" value="3"><span>אינפורמטיבי חל רק בפיטורים; אינטראקטיבי — רק בקידומים</span></label>
+  </div><button class="chk" onclick="chk('A',2,2,4)">בדקו תשובה</button><div class="fb" id="Afb2"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">ג. מה משפיע יותר על נאמנות העובדים שנותרו — תוצאת הפיטורים, או האופן שבו בוצעו?</div>
+  <div class="opts" id="Ao3">
+    <label class="opt"><input type="radio" name="A3" value="0"><span>התוצאה — העובדים שנותרו חשו הקלה שלא פוטרו</span></label>
+    <label class="opt"><input type="radio" name="A3" value="1"><span>האופן — צדק תהליכי ואינפורמטיבי משפיעים על אמון גם של מי שנותר</span></label>
+    <label class="opt"><input type="radio" name="A3" value="2"><span>אין קשר — עובדים מתעניינים רק בשכר שלהם</span></label>
+    <label class="opt"><input type="radio" name="A3" value="3"><span>שניהם שקולים — המחקר לא מבחין ביניהם</span></label>
+  </div><button class="chk" onclick="chk('A',3,1,4)">בדקו תשובה</button><div class="fb" id="Afb3"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">ד. מחקרים מצאו שבגל הפיטורים של גוגל, בקרב עובדים ממיעוטים שיעור המפוטרים עמד על כ-10% לעומת 6% בקרב שאר העובדים. באיזה ממד של צדק מדובר בפגיעה?</div>
+  <div class="opts" id="Ao4">
+    <label class="opt"><input type="radio" name="A4" value="0"><span>צדק אינפורמטיבי — כי לא הוסבר מדוע קבוצות מסוימות פוטרו יותר</span></label>
+    <label class="opt"><input type="radio" name="A4" value="1"><span>צדק חלוקתי — חלוקת נטל הפיטורים לא הייתה שוויונית בין קבוצות</span></label>
+    <label class="opt"><input type="radio" name="A4" value="2"><span>צדק אינטראקטיבי — ההנהלה לא דיברה בנפרד עם עובדי המיעוטים</span></label>
+    <label class="opt"><input type="radio" name="A4" value="3"><span>אין פגיעה בצדק — ההחלטה הייתה עסקית גרידא</span></label>
+  </div><button class="chk" onclick="chk('A',4,1,4)">בדקו תשובה</button><div class="fb" id="Afb4"></div></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות השתקפות — כל ארבעת הממדים</div>
+  <div class="dim-leg">
+    <div class="dp" style="background:#EEEDFE"><div class="dot" style="background:#534AB7"></div><span style="color:#3C3489"><b>אינפורמטיבי</b> — איכות ההסברים</span></div>
+    <div class="dp" style="background:#E1F5EE"><div class="dot" style="background:#0F6E56"></div><span style="color:#085041"><b>חלוקתי</b> — הוגנות התוצאות</span></div>
+    <div class="dp" style="background:#FAECE7"><div class="dot" style="background:#993C1D"></div><span style="color:#712B13"><b>אינטראקטיבי</b> — כבוד ויחס</span></div>
+    <div class="dp" style="background:#E6F1FB"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C"><b>פרוצדורלי</b> — הוגנות התהליך</span></div>
+  </div>
+
+  <div class="sb-row"><span id="ASsl">0 מתוך 2 נכונות</span><span id="ASsp">0%</span></div>
+  <div class="pt"><div class="pf" id="ASpr" style="width:0%;background:#1a1a2e"></div></div>
+
+  <div class="mcq"><div class="qt">1. לפי מחקרי הצדק הארגוני, איזה ממד הוא המנבא החזק ביותר של מחויבות ארגונית?</div>
+  <div class="opts" id="ASo1">
+    <label class="opt"><input type="radio" name="AS1" value="0"><span>צדק חלוקתי — עובדים מחויבים יותר כשהם מרוויחים טוב</span></label>
+    <label class="opt"><input type="radio" name="AS1" value="1"><span>צדק פרוצדורלי — כשעובדים מאמינים שהתהליך הוגן, הם מחויבים לארגון גם אם התוצאות לא תמיד לטובתם</span></label>
+    <label class="opt"><input type="radio" name="AS1" value="2"><span>צדק אינפורמטיבי — שקיפות היא המפתח לכל</span></label>
+    <label class="opt"><input type="radio" name="AS1" value="3"><span>כל הממדים שקולים — המחקר לא מבחין ביניהם</span></label>
+  </div><button class="chk" onclick="chkS('A',1,1,2)">בדקו תשובה</button><div class="fb" id="ASfb1"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">2. עובד שמרגיש שנפגע ממנו מבחינת צדק ארגוני — מה מנבא המחקר שיקרה?</div>
+  <div class="opts" id="ASo2">
+    <label class="opt"><input type="radio" name="AS2" value="0"><span>ירידה בביצועים (Task Performance) בלבד</span></label>
+    <label class="opt"><input type="radio" name="AS2" value="1"><span>שחיקה מקצועית (Burnout) בלבד</span></label>
+    <label class="opt"><input type="radio" name="AS2" value="2"><span>שילוב: ירידה באזרחות ארגונית (OCB), עלייה בהתנהגויות נגד-פרודוקטיביות, כוונות עזיבה גבוהות יותר ופגיעה ברווחה הנפשית</span></label>
+    <label class="opt"><input type="radio" name="AS2" value="3"><span>בדרך כלל העובד מתעלם ומסתגל תוך שבועיים</span></label>
+  </div><button class="chk" onclick="chkS('A',2,2,2)">בדקו תשובה</button><div class="fb" id="ASfb2"></div></div>
+
+  <div class="oq" style="margin-top:1rem"><label>3. אם הייתם מנהלים את גוגל — איזה ממד הייתם מתקנים ראשון ומדוע?</label><textarea id="ASoq1" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>4. האם ניתן לייצר צדק מלא בכל ארבעת הממדים בו-זמנית? מה המתח ביניהם?</label><textarea id="ASoq2" placeholder="תשובת הקבוצה..."></textarea></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלת עוגן לדיווח חזרה לכיתה</div>
+  <div class="anc">מה חייב ארגון להסביר לעובד שפוטר — ועד כמה פירוט מספיק?</div>
+  <div class="oq"><label>עמדת הקבוצה:</label><textarea id="Aanc" placeholder="סכמו בשניים-שלושה משפטים..."></textarea></div>
+</div>
+
+<div class="export-section">
+  <h3>שמירת תשובות הקבוצה</h3>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem">לחצו להכנת הסיכום — אחר כך הדפיסו לPDF עם <kbd style="font-size:11px;background:var(--paper);border:1px solid var(--border2);border-radius:4px;padding:1px 5px">Ctrl+P</kbd></p>
+  <button class="exp-btn" onclick="exportCase('A')">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v8M5 7l3 3 3-3"/><path d="M3 13h10"/></svg>
+    הכן סיכום להדפסה
+  </button>
+  <div id="A-export-out" style="display:none;margin-top:14px"></div>
+</div>
+</div>
+
+<!-- ══════════════════════ CASE B ══════════════════════ -->
+<div class="panel" id="p1">
+
+<div class="case-hd" style="background:#085041">
+  <h2 style="color:#E1F5EE">מקרה ב׳ — שכר שקוף ב-Buffer</h2>
+  <div class="sub" style="color:#9FE1CB">דאשבורד עבודת קבוצה | חדר שיח</div>
+  <span class="dim-tag" style="background:#0F6E56;color:#9FE1CB">צדק חלוקתי · Distributive Justice</span>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שמות חברי הקבוצה</div>
+  <div class="mg">
+    <div class="fw"><label>משתתף/ת 1</label><input id="Bm1" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 2</label><input id="Bm2" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 3</label><input id="Bm3" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 4</label><input id="Bm4" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 5</label><input id="Bm5" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 6</label><input id="Bm6" placeholder="שם מלא"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">רקע המקרה</div>
+  <div class="bg-box" style="background:#E1F5EE;color:#085041">
+    חברת Buffer פרסמה פומבית את שכר כל עובדיה — שם, תפקיד ושכר מדויק — לצד הנוסחה: בסיס תפקידי + ותק + מיקום גיאוגרפי + בונוס ביצועים. ההחלטה נועדה לבטל פערים ולבנות אמון. בפועל חלק מהעובדים גילו פערים שלא הבינו, עובדים חדשים נשכרו לעיתים בשכר גבוה ממי שעובד שנים, ועובדים בעלות מחיה נמוכה קיבלו שכר נמוך מחבריהם לתפקיד בארה"ב.
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות פתוחות לדיון</div>
+  <div class="oq"><label>1. כיצד שקיפות שכר יכולה גם לקדם וגם לפגוע בתחושת הצדק החלוקתי — תנו דוגמה לכל כיוון?</label><textarea id="Boq1" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>2. עובד ותיק גילה שעמית חדש מרוויח יותר ממנו. האם זה בהכרח אי-צדק? ומה על הארגון לעשות כדי להראות שההחלטה הייתה הוגנת?</label><textarea id="Boq2" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>3. מה עדיף: שקיפות מלאה עם הפתעות כואבות, או חוסר שקיפות עם ציפייה להוגנות?</label><textarea id="Boq3" placeholder="תשובת הקבוצה..."></textarea></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות רבות-ברירה — ספציפיות למקרה</div>
+  <div class="sb-row"><span id="Bsl">0 מתוך 3 נכונות</span><span id="Bsp">0%</span></div>
+  <div class="pt"><div class="pf" id="Bpr" style="width:0%;background:#0F6E56"></div></div>
+
+  <div class="mcq"><div class="qt">א. מה ההבדל בין Equality (שוויון) לבין Equity (הוגנות יחסית) בחלוקת שכר?</div>
+  <div class="opts" id="Bo1">
+    <label class="opt"><input type="radio" name="B1" value="0"><span>Equality = שוויון מוחלט לכולם; Equity = שכר פרופורציונלי לתרומה ולתשומות</span></label>
+    <label class="opt"><input type="radio" name="B1" value="1"><span>Equality = חלוקה לפי ותק; Equity = חלוקה לפי השכלה</span></label>
+    <label class="opt"><input type="radio" name="B1" value="2"><span>אין הבדל — שניהם מתארים חלוקה הוגנת</span></label>
+    <label class="opt"><input type="radio" name="B1" value="3"><span>Equity הוא המונח המשפטי; Equality הוא הארגוני</span></label>
+  </div><button class="chk" onclick="chk('B',1,0,3)">בדקו תשובה</button><div class="fb" id="Bfb1"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">ב. מה מחקרים מנבאים לגבי עובדים החשים שהצדק הארגוני כלפיהם נפגע?</div>
+  <div class="opts" id="Bo2">
+    <label class="opt"><input type="radio" name="B2" value="0"><span>ירידה בביצועים בלבד, עד שהמצב ישתפר</span></label>
+    <label class="opt"><input type="radio" name="B2" value="1"><span>שילוב: ירידה באזרחות ארגונית (OCB), עלייה בהתנהגויות נגד-פרודוקטיביות, כוונות עזיבה גבוהות ופגיעה ברווחה הנפשית</span></label>
+    <label class="opt"><input type="radio" name="B2" value="2"><span>פנייה לוועד העובדים בלבד</span></label>
+    <label class="opt"><input type="radio" name="B2" value="3"><span>בדרך כלל העובד מסתגל תוך שבועיים ואין השפעה מתמשכת</span></label>
+  </div><button class="chk" onclick="chk('B',2,1,3)">בדקו תשובה</button><div class="fb" id="Bfb2"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">ג. Buffer פרסמה נוסחת שכר שקופה. באיזה ממד של צדק זה עוזר בנוסף לצדק החלוקתי?</div>
+  <div class="opts" id="Bo3">
+    <label class="opt"><input type="radio" name="B3" value="0"><span>צדק פרוצדורלי — הנוסחה מגדירה תהליך עקבי ושקוף</span></label>
+    <label class="opt"><input type="radio" name="B3" value="1"><span>צדק אינטראקטיבי — ההנהלה מדברת עם העובדים</span></label>
+    <label class="opt"><input type="radio" name="B3" value="2"><span>אין קשר לממדים אחרים — נוסחה היא כלי חשבונאי בלבד</span></label>
+    <label class="opt"><input type="radio" name="B3" value="3"><span>צדק אינפורמטיבי בלבד — כי זו העברת מידע</span></label>
+  </div><button class="chk" onclick="chk('B',3,0,3)">בדקו תשובה</button><div class="fb" id="Bfb3"></div></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות השתקפות — כל ארבעת הממדים</div>
+  <div class="dim-leg">
+    <div class="dp" style="background:#EEEDFE"><div class="dot" style="background:#534AB7"></div><span style="color:#3C3489"><b>אינפורמטיבי</b> — איכות ההסברים</span></div>
+    <div class="dp" style="background:#E1F5EE"><div class="dot" style="background:#0F6E56"></div><span style="color:#085041"><b>חלוקתי</b> — הוגנות התוצאות</span></div>
+    <div class="dp" style="background:#FAECE7"><div class="dot" style="background:#993C1D"></div><span style="color:#712B13"><b>אינטראקטיבי</b> — כבוד ויחס</span></div>
+    <div class="dp" style="background:#E6F1FB"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C"><b>פרוצדורלי</b> — הוגנות התהליך</span></div>
+  </div>
+  <div class="sb-row"><span id="BSsl">0 מתוך 2 נכונות</span><span id="BSsp">0%</span></div>
+  <div class="pt"><div class="pf" id="BSpr" style="width:0%;background:#1a1a2e"></div></div>
+
+  <div class="mcq"><div class="qt">1. ארגון החליט לשנות את שיטת חלוקת הבונוסים. איזו גישה תוביל לתחושת צדק גבוהה יותר?</div>
+  <div class="opts" id="BSo1">
+    <label class="opt"><input type="radio" name="BS1" value="0"><span>הגדלת הבונוס הממוצע — ללא שינוי בתהליך הקבלה</span></label>
+    <label class="opt"><input type="radio" name="BS1" value="1"><span>פרסום קריטריונים ברורים, מתן אפשרות ערעור, והסבר אישי לכל עובד — גם אם הסכומים לא השתנו</span></label>
+    <label class="opt"><input type="radio" name="BS1" value="2"><span>חלוקה שוויונית מוחלטת לכולם</span></label>
+    <label class="opt"><input type="radio" name="BS1" value="3"><span>הסרת השקיפות לחלוטין כדי למנוע השוואות</span></label>
+  </div><button class="chk" onclick="chkS('B',1,1,2)">בדקו תשובה</button><div class="fb" id="BSfb1"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">2. עובד שמרגיש שנפגע ממנו מבחינת צדק ארגוני — מה מנבא המחקר שיקרה?</div>
+  <div class="opts" id="BSo2">
+    <label class="opt"><input type="radio" name="BS2" value="0"><span>ירידה בביצועים (Task Performance) בלבד</span></label>
+    <label class="opt"><input type="radio" name="BS2" value="1"><span>שחיקה מקצועית (Burnout) בלבד</span></label>
+    <label class="opt"><input type="radio" name="BS2" value="2"><span>שילוב: ירידה באזרחות ארגונית (OCB), עלייה בהתנהגויות נגד-פרודוקטיביות, כוונות עזיבה גבוהות ופגיעה ברווחה הנפשית</span></label>
+    <label class="opt"><input type="radio" name="BS2" value="3"><span>בדרך כלל העובד מסתגל תוך שבועיים</span></label>
+  </div><button class="chk" onclick="chkS('B',2,2,2)">בדקו תשובה</button><div class="fb" id="BSfb2"></div></div>
+
+  <div class="oq" style="margin-top:1rem"><label>3. אם הייתם מנהלים את Buffer — איזה ממד הייתם מתקנים ראשון ומדוע?</label><textarea id="BSoq1" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>4. האם ניתן לייצר צדק מלא בכל ארבעת הממדים בו-זמנית? מה המתח ביניהם?</label><textarea id="BSoq2" placeholder="תשובת הקבוצה..."></textarea></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלת עוגן לדיווח חזרה לכיתה</div>
+  <div class="anc">מה ההבדל בין שוויון (Equality) להוגנות יחסית (Equity) — ומה עדיף?</div>
+  <div class="oq"><label>עמדת הקבוצה:</label><textarea id="Banc" placeholder="סכמו בשניים-שלושה משפטים..."></textarea></div>
+</div>
+
+<div class="export-section">
+  <h3>שמירת תשובות הקבוצה</h3>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem">לחצו להכנת הסיכום — אחר כך הדפיסו לPDF עם <kbd style="font-size:11px;background:var(--paper);border:1px solid var(--border2);border-radius:4px;padding:1px 5px">Ctrl+P</kbd></p>
+  <button class="exp-btn" onclick="exportCase('B')">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v8M5 7l3 3 3-3"/><path d="M3 13h10"/></svg>
+    הכן סיכום להדפסה
+  </button>
+  <div id="B-export-out" style="display:none;margin-top:14px"></div>
+</div>
+</div>
+
+<!-- ══════════════════════ CASE C ══════════════════════ -->
+<div class="panel" id="p2">
+
+<div class="case-hd" style="background:#712B13">
+  <h2 style="color:#FAECE7">מקרה ג׳ — משוב מנהל בחברת ייצור</h2>
+  <div class="sub" style="color:#F5C4B3">דאשבורד עבודת קבוצה | חדר שיח</div>
+  <span class="dim-tag" style="background:#993C1D;color:#F5C4B3">צדק אינטראקטיבי · Interactional Justice</span>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שמות חברי הקבוצה</div>
+  <div class="mg">
+    <div class="fw"><label>משתתף/ת 1</label><input id="Cm1" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 2</label><input id="Cm2" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 3</label><input id="Cm3" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 4</label><input id="Cm4" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 5</label><input id="Cm5" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 6</label><input id="Cm6" placeholder="שם מלא"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">רקע המקרה</div>
+  <div class="bg-box" style="background:#FAECE7;color:#712B13">
+    דנה, מנהלת תפעול, מכנסת ישיבת צוות ואומרת לרון — מנהל משמרת — בפני כל הנוכחים: "אתה כבר שלושה שבועות מאכזב. אם זה קורה שוב — נצטרך לשקול את המשך העסקתך." רון לא ידע שהנושא הועלה לוועדת ניהול, ולא ניתנה לו הזדמנות להסביר שהעיכוב נבע מספקים — גורם שלא היה בשליטתו.
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות פתוחות לדיון</div>
+  <div class="oq"><label>1. אילו עקרונות של צדק אינטראקטיבי הופרו בסיטואציה זו, ומדוע?</label><textarea id="Coq1" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>2. האם התוצאה הייתה שונה לו דנה אמרה את אותם הדברים בשיחה פרטית? מדוע?</label><textarea id="Coq2" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>3. כמנהל/ת — מה הייתם עושים אחרת לפני, בזמן, ואחרי הישיבה, כדי לשמור על הצדק האינטראקטיבי?</label><textarea id="Coq3" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>4. מה לדעתכם חוו עובדי הצוות האחרים שנכחו בישיבה — ואיך זה ישפיע על התנהגותם בהמשך?</label><textarea id="Coq4" placeholder="תשובת הקבוצה..."></textarea></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות רבות-ברירה — ספציפיות למקרה</div>
+  <div class="sb-row"><span id="Csl">0 מתוך 3 נכונות</span><span id="Csp">0%</span></div>
+  <div class="pt"><div class="pf" id="Cpr" style="width:0%;background:#993C1D"></div></div>
+
+  <div class="mcq"><div class="qt">א. צדק אינטראקטיבי מורכב משני מרכיבים — מה הם?</div>
+  <div class="opts" id="Co1">
+    <label class="opt"><input type="radio" name="C1" value="0"><span>שכר הוגן ותנאי עבודה נאותים</span></label>
+    <label class="opt"><input type="radio" name="C1" value="1"><span>כבוד בינאישי (Interpersonal) ומתן הסברים (Informational)</span></label>
+    <label class="opt"><input type="radio" name="C1" value="2"><span>שקיפות ועקביות בתהליכי קבלת החלטות</span></label>
+    <label class="opt"><input type="radio" name="C1" value="3"><span>הוגנות בתוצאות ובתהליכים</span></label>
+  </div><button class="chk" onclick="chk('C',1,1,3)">בדקו תשובה</button><div class="fb" id="Cfb1"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">ב. מדוע ביקורת פומבית פוגעת בצדק אינטראקטיבי, גם כשהיא עניינית לחלוטין?</div>
+  <div class="opts" id="Co2">
+    <label class="opt"><input type="radio" name="C2" value="0"><span>כי ביקורת פומבית אסורה לפי חוק העבודה</span></label>
+    <label class="opt"><input type="radio" name="C2" value="1"><span>כי היא פוגעת בכבוד ובפרטיות, ומונעת מהעובד הזדמנות להגיב בצורה מכובדת</span></label>
+    <label class="opt"><input type="radio" name="C2" value="2"><span>כי היא גורמת לשאר הצוות להיות פחות פרודוקטיביים</span></label>
+    <label class="opt"><input type="radio" name="C2" value="3"><span>כי זה מוריד את מוטיבציית המנהל עצמו</span></label>
+  </div><button class="chk" onclick="chk('C',2,1,3)">בדקו תשובה</button><div class="fb" id="Cfb2"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">ג. מה ההשפעה הסבירה ביותר על שאר עובדי הצוות שנכחו בישיבה?</div>
+  <div class="opts" id="Co3">
+    <label class="opt"><input type="radio" name="C3" value="0"><span>ירידה באזרחות ארגונית (OCB) ועלייה בחרדה — הם מסיקים מסקנות על עתידם מהאופן שבו טיפלו בעמיתיהם</span></label>
+    <label class="opt"><input type="radio" name="C3" value="1"><span>עלייה במוטיבציה — הם יחששו לקבל ביקורת דומה</span></label>
+    <label class="opt"><input type="radio" name="C3" value="2"><span>אין השפעה — זה עניין בין דנה לרון בלבד</span></label>
+    <label class="opt"><input type="radio" name="C3" value="3"><span>שיפור בתקשורת הצוותית — כולם מבינים מה מצופה מהם</span></label>
+  </div><button class="chk" onclick="chk('C',3,0,3)">בדקו תשובה</button><div class="fb" id="Cfb3"></div></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות השתקפות — כל ארבעת הממדים</div>
+  <div class="dim-leg">
+    <div class="dp" style="background:#EEEDFE"><div class="dot" style="background:#534AB7"></div><span style="color:#3C3489"><b>אינפורמטיבי</b> — איכות ההסברים</span></div>
+    <div class="dp" style="background:#E1F5EE"><div class="dot" style="background:#0F6E56"></div><span style="color:#085041"><b>חלוקתי</b> — הוגנות התוצאות</span></div>
+    <div class="dp" style="background:#FAECE7"><div class="dot" style="background:#993C1D"></div><span style="color:#712B13"><b>אינטראקטיבי</b> — כבוד ויחס</span></div>
+    <div class="dp" style="background:#E6F1FB"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C"><b>פרוצדורלי</b> — הוגנות התהליך</span></div>
+  </div>
+  <div class="sb-row"><span id="CSsl">0 מתוך 2 נכונות</span><span id="CSsp">0%</span></div>
+  <div class="pt"><div class="pf" id="CSpr" style="width:0%;background:#1a1a2e"></div></div>
+
+  <div class="mcq"><div class="qt">1. לפי מחקרי הצדק הארגוני, איזה ממד הוא המנבא החזק ביותר של מחויבות ארגונית?</div>
+  <div class="opts" id="CSo1">
+    <label class="opt"><input type="radio" name="CS1" value="0"><span>צדק חלוקתי — עובדים מחויבים יותר כשהם מרוויחים טוב</span></label>
+    <label class="opt"><input type="radio" name="CS1" value="1"><span>צדק פרוצדורלי — כשעובדים מאמינים שהתהליך הוגן, הם מחויבים לארגון גם אם התוצאות לא תמיד לטובתם</span></label>
+    <label class="opt"><input type="radio" name="CS1" value="2"><span>צדק אינפורמטיבי — שקיפות היא המפתח לכל</span></label>
+    <label class="opt"><input type="radio" name="CS1" value="3"><span>כל הממדים שקולים — המחקר לא מבחין ביניהם</span></label>
+  </div><button class="chk" onclick="chkS('C',1,1,2)">בדקו תשובה</button><div class="fb" id="CSfb1"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">2. ארגון שרוצה לשפר את תפיסת הצדק האינטראקטיבי — מה הצעד האפקטיבי ביותר?</div>
+  <div class="opts" id="CSo2">
+    <label class="opt"><input type="radio" name="CS2" value="0"><span>העלאת שכר לכלל העובדים</span></label>
+    <label class="opt"><input type="radio" name="CS2" value="1"><span>הכשרת מנהלים בתקשורת מכבדת, מתן הסברים ויצירת מרחבי שיח בטוחים לעובדים</span></label>
+    <label class="opt"><input type="radio" name="CS2" value="2"><span>פרסום נוהל כתוב של כללי התנהגות</span></label>
+    <label class="opt"><input type="radio" name="CS2" value="3"><span>הגדלת תדירות ישיבות הצוות</span></label>
+  </div><button class="chk" onclick="chkS('C',2,1,2)">בדקו תשובה</button><div class="fb" id="CSfb2"></div></div>
+
+  <div class="oq" style="margin-top:1rem"><label>3. אם הייתם מנהלים את הצוות של דנה — איזה ממד הייתם מתקנים ראשון ומדוע?</label><textarea id="CSoq1" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>4. האם ניתן לייצר צדק מלא בכל ארבעת הממדים בו-זמנית? מה המתח ביניהם?</label><textarea id="CSoq2" placeholder="תשובת הקבוצה..."></textarea></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלת עוגן לדיווח חזרה לכיתה</div>
+  <div class="anc">מה ההבדל בין "מה אמרו לי" לבין "איך אמרו לי" — ואיזה מהם משפיע יותר על תחושת הצדק?</div>
+  <div class="oq"><label>עמדת הקבוצה:</label><textarea id="Canc" placeholder="סכמו בשניים-שלושה משפטים..."></textarea></div>
+</div>
+
+<div class="export-section">
+  <h3>שמירת תשובות הקבוצה</h3>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem">לחצו להכנת הסיכום — אחר כך הדפיסו לPDF עם <kbd style="font-size:11px;background:var(--paper);border:1px solid var(--border2);border-radius:4px;padding:1px 5px">Ctrl+P</kbd></p>
+  <button class="exp-btn" onclick="exportCase('C')">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v8M5 7l3 3 3-3"/><path d="M3 13h10"/></svg>
+    הכן סיכום להדפסה
+  </button>
+  <div id="C-export-out" style="display:none;margin-top:14px"></div>
+</div>
+</div>
+
+<!-- ══════════════════════ CASE D ══════════════════════ -->
+<div class="panel" id="p3">
+
+<div class="case-hd" style="background:#0C447C">
+  <h2 style="color:#E6F1FB">מקרה ד׳ — ועדת קידום בחברת ביטוח</h2>
+  <div class="sub" style="color:#85B7EB">דאשבורד עבודת קבוצה | חדר שיח</div>
+  <span class="dim-tag" style="background:#185FA5;color:#B5D4F4">צדק פרוצדורלי · Procedural Justice</span>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שמות חברי הקבוצה</div>
+  <div class="mg">
+    <div class="fw"><label>משתתף/ת 1</label><input id="Dm1" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 2</label><input id="Dm2" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 3</label><input id="Dm3" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 4</label><input id="Dm4" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 5</label><input id="Dm5" placeholder="שם מלא"></div>
+    <div class="fw"><label>משתתף/ת 6</label><input id="Dm6" placeholder="שם מלא"></div>
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">רקע המקרה</div>
+  <div class="bg-box" style="background:#E6F1FB;color:#0C447C">
+    ועדת הקידום לניהול בכיר בחברת ביטוח מורכבת מחמישה מנהלים — כולם גברים מעל גיל 50. הקריטריונים לקידום אינם מפורסמים. המועמדים לא מקבלים משוב ואינם יכולים לערער. בשלוש השנים האחרונות 11 מתוך 12 מקודמים היו גברים — למרות שנשים מהוות 40% מהעובדים. ההנהלה טוענת שהתהליך מבוסס על "כישרון וביצועים".
+  </div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות פתוחות לדיון</div>
+  <div class="oq"><label>1. לפי מודל Leventhal, אילו מששת הקריטריונים לצדק פרוצדורלי מופרים כאן?</label><textarea id="Doq1" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>2. האם תוצאה שנראית מוטה מוכיחה שהתהליך אינו הוגן? מה צריך לבדוק כדי לדעת?</label><textarea id="Doq2" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>3. מהם השינויים הפרוצדורליים המינימליים שיהפכו את התהליך להוגן יותר?</label><textarea id="Doq3" placeholder="תשובת הקבוצה..."></textarea></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות רבות-ברירה — ספציפיות למקרה</div>
+  <div class="sb-row"><span id="Dsl">0 מתוך 3 נכונות</span><span id="Dsp">0%</span></div>
+  <div class="pt"><div class="pf" id="Dpr" style="width:0%;background:#185FA5"></div></div>
+
+  <div class="mcq"><div class="qt">א. מודל Leventhal מגדיר שישה קריטריונים לצדק פרוצדורלי — איזה מהבאים אינו אחד מהם?</div>
+  <div class="opts" id="Do1">
+    <label class="opt"><input type="radio" name="D1" value="0"><span>עקביות — כללים זהים לכולם בכל עת</span></label>
+    <label class="opt"><input type="radio" name="D1" value="1"><span>ייצוג — לנושאי העניין יש קול בתהליך</span></label>
+    <label class="opt"><input type="radio" name="D1" value="2"><span>רווחיות — ההחלטה מיטיבה עם הארגון כלכלית</span></label>
+    <label class="opt"><input type="radio" name="D1" value="3"><span>ניתן לתיקון — קיימת אפשרות ערעור</span></label>
+  </div><button class="chk" onclick="chk('D',1,2,3)">בדקו תשובה</button><div class="fb" id="Dfb1"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">ב. מהו "אפקט ההליך ההוגן" (Fair Process Effect)?</div>
+  <div class="opts" id="Do2">
+    <label class="opt"><input type="radio" name="D2" value="0"><span>עובדים מקבלים תוצאות שליליות טוב יותר כשהתהליך שהוביל אליהן נתפס כהוגן</span></label>
+    <label class="opt"><input type="radio" name="D2" value="1"><span>תהליך הוגן תמיד מוביל לתוצאה הוגנת</span></label>
+    <label class="opt"><input type="radio" name="D2" value="2"><span>עובדים מעדיפים תהליך הוגן על פני שכר גבוה</span></label>
+    <label class="opt"><input type="radio" name="D2" value="3"><span>ועדות שוות מין מייצרות תוצאות הוגנות יותר</span></label>
+  </div><button class="chk" onclick="chk('D',2,0,3)">בדקו תשובה</button><div class="fb" id="Dfb2"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">ג. ההנהלה טוענת שהתהליך מבוסס על "כישרון וביצועים" — מה הבעיה המרכזית בטענה זו?</div>
+  <div class="opts" id="Do3">
+    <label class="opt"><input type="radio" name="D3" value="0"><span>כישרון וביצועים אינם קריטריונים לגיטימיים לקידום</span></label>
+    <label class="opt"><input type="radio" name="D3" value="1"><span>ללא קריטריונים שקופים, מנגנון ערעור ומשוב אישי — אי אפשר לאמת את הטענה, וההטיה הלא-מודעת פועלת ללא בקרה</span></label>
+    <label class="opt"><input type="radio" name="D3" value="2"><span>הטענה נכונה — תוצאות שונות בין גברים לנשים הן טבעיות</span></label>
+    <label class="opt"><input type="radio" name="D3" value="3"><span>הבעיה היא רק בהרכב הועדה</span></label>
+  </div><button class="chk" onclick="chk('D',3,1,3)">בדקו תשובה</button><div class="fb" id="Dfb3"></div></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלות השתקפות — כל ארבעת הממדים</div>
+  <div class="dim-leg">
+    <div class="dp" style="background:#EEEDFE"><div class="dot" style="background:#534AB7"></div><span style="color:#3C3489"><b>אינפורמטיבי</b> — איכות ההסברים</span></div>
+    <div class="dp" style="background:#E1F5EE"><div class="dot" style="background:#0F6E56"></div><span style="color:#085041"><b>חלוקתי</b> — הוגנות התוצאות</span></div>
+    <div class="dp" style="background:#FAECE7"><div class="dot" style="background:#993C1D"></div><span style="color:#712B13"><b>אינטראקטיבי</b> — כבוד ויחס</span></div>
+    <div class="dp" style="background:#E6F1FB"><div class="dot" style="background:#185FA5"></div><span style="color:#0C447C"><b>פרוצדורלי</b> — הוגנות התהליך</span></div>
+  </div>
+  <div class="sb-row"><span id="DSsl">0 מתוך 2 נכונות</span><span id="DSsp">0%</span></div>
+  <div class="pt"><div class="pf" id="DSpr" style="width:0%;background:#1a1a2e"></div></div>
+
+  <div class="mcq"><div class="qt">1. לפי מחקרי הצדק הארגוני, איזה ממד הוא המנבא החזק ביותר של מחויבות ארגונית?</div>
+  <div class="opts" id="DSo1">
+    <label class="opt"><input type="radio" name="DS1" value="0"><span>צדק חלוקתי — עובדים מחויבים יותר כשהם מרוויחים טוב</span></label>
+    <label class="opt"><input type="radio" name="DS1" value="1"><span>צדק פרוצדורלי — כשעובדים מאמינים שהתהליך הוגן, הם מחויבים לארגון גם אם התוצאות לא תמיד לטובתם</span></label>
+    <label class="opt"><input type="radio" name="DS1" value="2"><span>צדק אינפורמטיבי — שקיפות היא המפתח לכל</span></label>
+    <label class="opt"><input type="radio" name="DS1" value="3"><span>כל הממדים שקולים — המחקר לא מבחין ביניהם</span></label>
+  </div><button class="chk" onclick="chkS('D',1,1,2)">בדקו תשובה</button><div class="fb" id="DSfb1"></div></div>
+
+  <hr class="div">
+  <div class="mcq"><div class="qt">2. עובד שמרגיש שנפגע ממנו מבחינת צדק ארגוני — מה מנבא המחקר שיקרה?</div>
+  <div class="opts" id="DSo2">
+    <label class="opt"><input type="radio" name="DS2" value="0"><span>ירידה בביצועים (Task Performance) בלבד</span></label>
+    <label class="opt"><input type="radio" name="DS2" value="1"><span>שחיקה מקצועית (Burnout) בלבד</span></label>
+    <label class="opt"><input type="radio" name="DS2" value="2"><span>שילוב: ירידה באזרחות ארגונית (OCB), עלייה בהתנהגויות נגד-פרודוקטיביות, כוונות עזיבה גבוהות ופגיעה ברווחה הנפשית</span></label>
+    <label class="opt"><input type="radio" name="DS2" value="3"><span>בדרך כלל העובד מסתגל תוך שבועיים</span></label>
+  </div><button class="chk" onclick="chkS('D',2,2,2)">בדקו תשובה</button><div class="fb" id="DSfb2"></div></div>
+
+  <div class="oq" style="margin-top:1rem"><label>3. אם הייתם מנהלים את חברת הביטוח — איזה ממד הייתם מתקנים ראשון ומדוע?</label><textarea id="DSoq1" placeholder="תשובת הקבוצה..."></textarea></div>
+  <div class="oq"><label>4. האם ניתן לייצר צדק מלא בכל ארבעת הממדים בו-זמנית? מה המתח ביניהם?</label><textarea id="DSoq2" placeholder="תשובת הקבוצה..."></textarea></div>
+</div>
+
+<div class="card">
+  <div class="sec-lbl">שאלת עוגן לדיווח חזרה לכיתה</div>
+  <div class="anc">מתי תהליך הוגן יכול לייצר תוצאה לא צודקת — ולהפך?</div>
+  <div class="oq"><label>עמדת הקבוצה:</label><textarea id="Danc" placeholder="סכמו בשניים-שלושה משפטים..."></textarea></div>
+</div>
+
+<div class="export-section">
+  <h3>שמירת תשובות הקבוצה</h3>
+  <p style="font-size:13px;color:var(--text2);margin-bottom:.75rem">לחצו להכנת הסיכום — אחר כך הדפיסו לPDF עם <kbd style="font-size:11px;background:var(--paper);border:1px solid var(--border2);border-radius:4px;padding:1px 5px">Ctrl+P</kbd></p>
+  <button class="exp-btn" onclick="exportCase('D')">
+    <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 2v8M5 7l3 3 3-3"/><path d="M3 13h10"/></svg>
+    הכן סיכום להדפסה
+  </button>
+  <div id="D-export-out" style="display:none;margin-top:14px"></div>
+</div>
+</div>
+
+</div><!-- /main -->
+
+<script>
+const TC=['#3C3489','#085041','#712B13','#0C447C'];
+function sw(i,btn){
+  document.querySelectorAll('.panel').forEach((p,j)=>p.classList.toggle('active',j===i));
+  document.querySelectorAll('.tab-btn').forEach((b,j)=>{
+    if(j===i){b.classList.add('active');b.style.cssText=`background:${TC[j]};border-color:${TC[j]};color:#fff`;}
+    else{b.classList.remove('active');b.style.cssText='';}
+  });
+}
+
+function ynSel(cas,val){
+  document.getElementById(cas+'yn-yes').classList.toggle('yes-sel',val==='yes');
+  document.getElementById(cas+'yn-no').classList.toggle('no-sel',val==='no');
+  document.getElementById(cas+'yn-reason').style.display='block';
+}
+
+const fbs={
+  A:{1:{c:"נכון. לב הצדק האינפורמטיבי הוא מתן הסברים מספקים והזדמנות לשאול שאלות. חסימת הגישה ללא הודעה פגעה בשניהם בו-זמנית.",w:"פיצויים ואישורים הם נושאים נפרדים. הצדק האינפורמטיבי עוסק בשקיפות ואיכות ההסברים — לא בגובה הפיצויים."},
+    2:{c:"מדויק. צדק אינפורמטיבי = איכות ההסברים והנימוקים (Greenberg, 1993). צדק אינטראקטיבי = כבוד, אדיבות ורגישות ביחס הישיר לעובד.",w:"לא נכון. שני הממדים אינם עוסקים בתוצאות או בתהליכים פורמליים — הם עוסקים ב'איך' של האינטראקציה האנושית."},
+    3:{c:"נכון. מחקרי Folger ו-Cropanzano מראים 'אפקט הניצול': העובדים שנותרו מסיקים מסקנות על עתידם מהאופן שבו פוטרו עמיתיהם.",w:"לא מדויק. האופן שבו הפיטורים בוצעו — לא רק עצם הפיטורים — הוא המנבא החזק יותר של אמון ומחויבות אצל מי שנותר."},
+    4:{c:"נכון. כשנטל הפיטורים מתחלק בצורה לא שווה בין קבוצות — זהו פגם בצדק החלוקתי. הממד הזה עוסק בהוגנות התוצאות עצמן, לא רק בתהליך.",w:"לא נכון. פערים בשיעורי הפיטורים בין קבוצות הם שאלה של צדק חלוקתי — מי קיבל את נטל ההחלטה ובאיזה שיעור? האם ההפצה הייתה הוגנת?"}},
+  B:{1:{c:"נכון. Equality = שוויון מוחלט; Equity = הוגנות יחסית לתרומה ולתשומות. זוהי הבחנה בסיסית בצדק חלוקתי.",w:"לא נכון. ההבחנה הקלאסית: Equality = שוויון מוחלט; Equity = פרופורציה לתרומה. זהו בסיס תיאוריית Adams."},
+    2:{c:"נכון. המחקר מראה תמונה מורכבת: פגיעה בצדק ארגוני מתבטאת במישורים מרובים בו-זמנית — ביצועים, מוטיבציה, בריאות נפשית וכוונות עזיבה.",w:"לא מדויק. התנהגויות נגד-פרודוקטיביות (CWB), ירידה באזרחות ארגונית (OCB) ופגיעה ברווחה הנפשית מתרחשים יחד — לא תגובה אחת בלבד."},
+    3:{c:"נכון. נוסחה שקופה ועקבית היא מאפיין של צדק פרוצדורלי (Leventhal) — Buffer חיזקה שני ממדים בו-זמנית.",w:"לא בדיוק. נוסחה עקבית ושקופה היא עיקרון של צדק פרוצדורלי — היא מגדירה תהליך ברור וניתן לאימות."}},
+  C:{1:{c:"נכון. Greenberg חילק את הצדק האינטראקטיבי לשני מרכיבים: יחס בינאישי מכבד (Interpersonal) ומתן הסברים (Informational). שניהם הופרו כאן.",w:"לא נכון. שכר ותנאים = צדק חלוקתי; שקיפות ועקביות = צדק פרוצדורלי. הצדק האינטראקטיבי עוסק ביחס הישיר בין מנהל לעובד."},
+    2:{c:"נכון. ביקורת פומבית מפרה כבוד בינאישי ומונעת מהעובד להגיב באופן מכובד — שני עקרונות ליבה בצדק האינטראקטיבי.",w:"חוק העבודה רלוונטי, אך לא הסיבה הארגונית המרכזית. הצדק האינטראקטיבי מתמקד בפגיעה בכבוד ובזכות להגיב — לא בהיבט המשפטי."},
+    3:{c:"נכון לפי הספרות. 'אפקט הצופה' בצדק ארגוני: עובדים שנכחו בביקורת לא הוגנת חווים ירידה באזרחות ארגונית (OCB) ועלייה בחרדה — כי הם מפרשים זאת כאות לגבי עתידם שלהם.",w:"לא מדויק. פחד עשוי לייצר ציות קצר-טווח, אך המחקר מראה שביקורת פומבית לא הוגנת פוגעת באזרחות הארגונית (OCB) ובמחויבות של כלל הצוות."}},
+  D:{1:{c:"נכון! 'רווחיות' אינה אחד מקריטריוני Leventhal. ששת הקריטריונים: עקביות, חוסר הטיה, דיוק, ניתן לתיקון, ייצוג ואתיקה.",w:"זהו אחד מקריטריוני Leventhal. הקריטריון שאינו ברשימה הוא 'רווחיות' — Leventhal לא כלל שיקול כלכלי-ארגוני כחלק מצדק פרוצדורלי."},
+    2:{c:"נכון. Fair Process Effect (Lind & Tyler, 1988): עובדים מוכנים לקבל תוצאות שליליות טוב יותר כשהתהליך שהוביל אליהן נתפס כהוגן.",w:"לא נכון. האפקט הוא כיוון הפוך: תהליך הוגן לא מבטיח תוצאה הוגנת, אך מגביר את הנכונות לקבל תוצאות שליליות."},
+    3:{c:"נכון. ללא קריטריונים שקופים, מנגנון ערעור ומשוב אישי — אי אפשר לאמת את הטענה. ההטיה הלא-מודעת (Unconscious Bias) פועלת בדיוק בוואקום כזה.",w:"לא נכון. כישרון וביצועים הם קריטריונים לגיטימיים — הבעיה היא שבלי שקיפות ובקרה, אין דרך לאמת שהם אכן מה שמכריע."}}
+};
+
+const sfbs={
+  commit:{c:"נכון לפי Folger ו-Greenberg. צדק פרוצדורלי הוא המנבא החזק ביותר של מחויבות ארגונית — כי הוא מסמל לעובד שהארגון מעריך ומכבד אותו כאדם.",w:"לא מדויק. המחקר המצטבר מראה שצדק פרוצדורלי — לא חלוקתי — הוא המנבא החזק ביותר של מחויבות, אמון ואזרחות ארגונית (OCB)."},
+  harm:{c:"נכון. הספרות מראה תמונה מורכבת: פגיעה בצדק ארגוני מתבטאת במישורים מרובים בו-זמנית — ביצועים, מוטיבציה, בריאות נפשית וכוונות עזיבה.",w:"לא מדויק. התנהגויות נגד-פרודוקטיביות (CWB), ירידה באזרחות ארגונית (OCB), ופגיעה ברווחה הנפשית מתרחשים יחד — לא רק ביצועים בלבד."},
+  bonus:{c:"נכון לפי המחקר. שיפור בצדק פרוצדורלי (קריטריונים ברורים + ערעור + הסבר אישי) מעלה תפיסת הוגנות יותר מהגדלת הסכום — גם כשהסכום לא משתנה.",w:"לא נכון. המחקר מראה בעקביות שצדק פרוצדורלי ואינפורמטיבי מסבירים שביעות רצון מהחלוקה יותר מגובה הסכום עצמו."},
+  interact:{c:"נכון. הכשרת מנהלים בתקשורת מכבדת היא ההתערבות האפקטיבית ביותר לשיפור הצדק האינטראקטיבי — היא פועלת ישירות על הממד שעוסק ביחס הבינאישי.",w:"לא נכון. שכר, נהלים כתובים וישיבות אינם מטפלים ישירות בממד האינטראקטיבי. הוא דורש שינוי בהתנהגות הבינאישית של המנהלים — לא בתנאים הפורמליים."}
+};
+
+const state={};
+['A','B','C','D'].forEach(c=>state[c]={a:{},n:0,sa:{},sn:0});
+
+function updScore(c){
+  const tot=Object.values(state[c].a).filter(Boolean).length;
+  const tot4=c==='A'?4:3;
+  const pct=tot4>0?Math.round(state[c].n/tot4*100):0;
+  document.getElementById(c+'sl').textContent=`${state[c].n} מתוך ${tot} נכונות`;
+  document.getElementById(c+'sp').textContent=pct+'%';
+  document.getElementById(c+'pr').style.width=(tot/tot4*100)+'%';
+}
+function updSScore(c){
+  const tot=Object.values(state[c].sa).filter(Boolean).length;
+  const pct=Math.round(state[c].sn/2*100);
+  document.getElementById(c+'Ssl').textContent=`${state[c].sn} מתוך ${tot} נכונות`;
+  document.getElementById(c+'Ssp').textContent=pct+'%';
+  document.getElementById(c+'Spr').style.width=(tot/2*100)+'%';
+}
+
+function chk(cas,q,correct,total){
+  const sel=document.querySelector(`input[name="${cas}${q}"]:checked`);
+  if(!sel||state[cas].a[q])return;
+  state[cas].a[q]=true;
+  const chosen=parseInt(sel.value),ok=chosen===correct;
+  if(ok)state[cas].n++;
+  document.querySelectorAll(`#${cas}o${q} .opt`).forEach((o,i)=>{
+    if(i===correct)o.classList.add('correct');
+    else if(i===chosen&&!ok)o.classList.add('wrong');
+    else o.classList.add('shown');
+    o.style.pointerEvents='none';
+  });
+  const fb=document.getElementById(`${cas}fb${q}`);
+  fb.textContent=ok?fbs[cas][q].c:fbs[cas][q].w;
+  fb.className='fb '+(ok?'c':'w');
+  const pi=parseInt(q)-1;
+  const btns=document.querySelectorAll(`#p${['A','B','C','D'].indexOf(cas)} .chk`);
+  if(btns[pi])btns[pi].disabled=true;
+  updScore(cas);
+}
+
+function chkS(cas,q,correct,total){
+  const sfbKey=cas==='C'&&q===2?'interact':(q===1?'commit':(cas==='B'&&q===1?'bonus':'harm'));
+  const sel=document.querySelector(`input[name="${cas}S${q}"]:checked`);
+  if(!sel||state[cas].sa[q])return;
+  state[cas].sa[q]=true;
+  const chosen=parseInt(sel.value),ok=chosen===correct;
+  if(ok)state[cas].sn++;
+  document.querySelectorAll(`#${cas}So${q} .opt`).forEach((o,i)=>{
+    if(i===correct)o.classList.add('correct');
+    else if(i===chosen&&!ok)o.classList.add('wrong');
+    else o.classList.add('shown');
+    o.style.pointerEvents='none';
+  });
+  const fb=document.getElementById(`${cas}Sfb${q}`);
+  fb.textContent=ok?sfbs[sfbKey].c:sfbs[sfbKey].w;
+  fb.className='fb '+(ok?'c':'w');
+  updSScore(cas);
+}
+
+function exportCase(cas){
+  const meta={
+    A:{title:'מקרה א׳ — פיטורי גוגל 2023', dim:'צדק אינפורמטיבי · Informational Justice', hdr:'#3C3489', tag:'#534AB7', tagTx:'#CECBF6', light:'#EEEDFE', accent:'#534AB7'},
+    B:{title:'מקרה ב׳ — שכר שקוף ב-Buffer', dim:'צדק חלוקתי · Distributive Justice', hdr:'#085041', tag:'#0F6E56', tagTx:'#9FE1CB', light:'#E1F5EE', accent:'#0F6E56'},
+    C:{title:"מקרה ג׳ — משוב מנהל בחברת ייצור", dim:'צדק אינטראקטיבי · Interactional Justice', hdr:'#712B13', tag:'#993C1D', tagTx:'#F5C4B3', light:'#FAECE7', accent:'#993C1D'},
+    D:{title:"מקרה ד׳ — ועדת קידום בחברת ביטוח", dim:'צדק פרוצדורלי · Procedural Justice', hdr:'#0C447C', tag:'#185FA5', tagTx:'#B5D4F4', light:'#E6F1FB', accent:'#185FA5'}
+  };
+  const m=meta[cas];
+  const members=[];
+  for(let i=1;i<=6;i++){const v=document.getElementById(`${cas}m${i}`)?.value?.trim();if(v)members.push(v);}
+  const qs={
+    A:[{l:'לגיטימיות הפיטורים',id:'Ayn-text'},{l:'מה לא היה הוגן',id:'Aoq1'},{l:'מה היה אפשר לעשות אחרת',id:'Aoq2'},{l:'נזק ארגוני',id:'Aoq3'},{l:'איזה ממד לתקן ראשון',id:'ASoq1'},{l:'מתח בין הממדים',id:'ASoq2'},{l:'שאלת עוגן',id:'Aanc'}],
+    B:[{l:'שקיפות — לטובה ולרעה',id:'Boq1'},{l:'עובד ותיק ועמית חדש',id:'Boq2'},{l:'שקיפות מלאה או חוסר שקיפות',id:'Boq3'},{l:'איזה ממד לתקן ראשון',id:'BSoq1'},{l:'מתח בין הממדים',id:'BSoq2'},{l:'שאלת עוגן',id:'Banc'}],
+    C:[{l:'עקרונות שהופרו',id:'Coq1'},{l:'פרטי לעומת פומבי',id:'Coq2'},{l:'מה הייתם עושים אחרת',id:'Coq3'},{l:'חוויית הצוות',id:'Coq4'},{l:'איזה ממד לתקן ראשון',id:'CSoq1'},{l:'מתח בין הממדים',id:'CSoq2'},{l:'שאלת עוגן',id:'Canc'}],
+    D:[{l:'קריטריוני Leventhal שהופרו',id:'Doq1'},{l:'תוצאה מוטה לעומת תהליך לא הוגן',id:'Doq2'},{l:'שינויים פרוצדורליים מינימליים',id:'Doq3'},{l:'איזה ממד לתקן ראשון',id:'DSoq1'},{l:'מתח בין הממדים',id:'DSoq2'},{l:'שאלת עוגן',id:'Danc'}]
+  };
+  const caseScore=state[cas].n;
+  const caseTot=cas==='A'?4:3;
+  const sharedScore=state[cas].sn;
+  const memberPills=members.length
+    ?members.map(mn=>`<span style="display:inline-block;background:${m.light};color:${m.hdr};font-size:12px;font-weight:700;padding:3px 11px;border-radius:20px;margin:2px 3px 2px 0">${mn}</span>`).join('')
+    :'<span style="font-size:13px;color:#aaa">(לא הוזנו שמות)</span>';
+  let qRows='';
+  qs[cas].forEach(q=>{
+    const val=document.getElementById(q.id)?.value?.trim()||'';
+    qRows+=`<div style="margin-bottom:.9rem;border-right:3px solid ${m.accent};padding-right:11px">
+      <div style="font-size:12px;font-weight:700;color:${m.hdr};margin-bottom:3px">${q.l}</div>
+      <div style="font-size:13px;color:#333;line-height:1.65;white-space:pre-wrap">${val||'<span style="color:#bbb">(לא נענה)</span>'}</div>
+    </div>`;
+  });
+  const html=`<div style="direction:rtl;font-family:Arial,sans-serif;border:1px solid #e0ddd6;border-radius:12px;overflow:hidden;background:#fff">
+  <div style="background:${m.hdr};padding:.875rem 1.25rem">
+    <div style="color:#fff;font-size:16px;font-weight:700;margin-bottom:2px">${m.title}</div>
+    <div style="color:rgba(255,255,255,.7);font-size:11px;margin-bottom:5px">מבוא לניהול משאבי אנוש · ד"ר הדס הרמתי · ${new Date().toLocaleDateString('he-IL')}</div>
+    <span style="display:inline-block;background:${m.tag};color:${m.tagTx};font-size:10px;font-weight:600;padding:2px 10px;border-radius:20px">${m.dim}</span>
+  </div>
+  <div style="padding:1rem 1.25rem">
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-bottom:.5rem">חברי הקבוצה</div>
+    <div style="margin-bottom:1rem">${memberPills}</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:1rem">
+      <div style="background:#f7f6f2;border-radius:8px;padding:8px 10px;text-align:center">
+        <div style="font-size:20px;font-weight:700;color:${m.accent}">${caseScore}/${caseTot}</div>
+        <div style="font-size:10px;color:#888;margin-top:2px">שאלות מקרה</div>
+      </div>
+      <div style="background:#f7f6f2;border-radius:8px;padding:8px 10px;text-align:center">
+        <div style="font-size:20px;font-weight:700;color:#1a1a2e">${sharedScore}/2</div>
+        <div style="font-size:10px;color:#888;margin-top:2px">שאלות משותפות</div>
+      </div>
+    </div>
+    <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#aaa;margin-bottom:.75rem">תשובות פתוחות</div>
+    ${qRows}
+  </div>
+  <div style="border-top:1px solid #e0ddd6;padding:.5rem 1.25rem;display:flex;justify-content:space-between;font-size:10px;color:#aaa">
+    <span>דאשבורד צדק ארגוני</span>
+    <span>${new Date().toLocaleString('he-IL')}</span>
+  </div>
+</div>
+<div style="margin-top:10px;padding:8px 12px;background:#f0f7ff;border:1px dashed #378ADD;border-radius:8px;font-size:12px;color:#0C447C;direction:rtl">
+  להדפסה לPDF: <strong>Ctrl+P</strong> ← "שמור כ-PDF" (מומלץ: ללא שוליים, כיוון לאורך)
+</div>`;
+  const outDiv=document.getElementById(`${cas}-export-out`);
+  outDiv.innerHTML=html;
+  outDiv.style.display='block';
+  outDiv.scrollIntoView({behavior:'smooth',block:'nearest'});
+}
+</script>
+</body>
+</html>
