@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>סוזן פאולר — שנה מוזרה מאוד ב-Uber</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;700;900&family=Heebo:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #0d0d0f;
+    --surface: #131316;
+    --surface2: #1a1a1f;
+    --border: #2a2a33;
+    --red: #e8342a;
+    --red-dim: #8b1f1a;
+    --amber: #d4882a;
+    --amber-dim: #7a4c10;
+    --teal: #2ab8c4;
+    --teal-dim: #104f57;
+    --text: #f0ede8;
+    --text-muted: #7a7870;
+    --text-dim: #4a4845;
+    --gold: #c9a84c;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Heebo', sans-serif;
+    font-weight: 300;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    position: relative;
+    overflow: hidden;
+    padding: 0 6vw;
+  }
+
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 30%, rgba(232,52,42,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 40% 60% at 80% 70%, rgba(42,184,196,0.04) 0%, transparent 50%),
+      repeating-linear-gradient(0deg, transparent, transparent 79px, rgba(255,255,255,0.015) 80px),
+      repeating-linear-gradient(90deg, transparent, transparent 79px, rgba(255,255,255,0.015) 80px);
+    z-index: 0;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 12vh 0 4vh;
+    max-width: 900px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+    color: var(--red);
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.4s forwards;
+  }
+
+  .hero-title em {
+    font-style: italic;
+    color: var(--red);
+  }
+
+  .hero-subtitle {
+    font-size: clamp(1rem, 2vw, 1.2rem);
+    color: var(--text-muted);
+    font-weight: 300;
+    max-width: 600px;
+    line-height: 1.9;
+    margin-bottom: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.6s forwards;
+  }
+
+  .hero-course {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    margin-bottom: 2.5rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.75s forwards;
+  }
+
+  .course-name {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  .course-sep {
+    color: var(--text-dim);
+    font-size: 0.8rem;
+  }
+
+  .course-author {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .course-link {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.85rem;
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal-dim);
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .course-link:hover {
+    color: #5dd4dc;
+    border-color: var(--teal);
+  }
+
+  .hero-meta {
+    display: flex;
+    gap: 3rem;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.9s 0.8s forwards;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .meta-label {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+  }
+
+  .meta-value {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+  }
+
+  .hero-scroll {
+    position: relative;
+    z-index: 1;
+    padding-bottom: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    color: var(--text-dim);
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.7rem;
+    opacity: 0;
+    animation: fadeUp 0.9s 1.2s forwards;
+  }
+
+  .scroll-line {
+    width: 40px;
+    height: 1px;
+    background: var(--border);
+  }
+
+  /* ─── ABOUT SECTION ─── */
+  .about {
+    padding: 8vh 6vw;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 6vw;
+    border-top: 1px solid var(--border);
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .about-label {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: var(--teal);
+    margin-bottom: 1.5rem;
+  }
+
+  .about-name {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+
+  .about-role {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    letter-spacing: 0.05em;
+    margin-bottom: 2rem;
+  }
+
+  .stat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    margin-top: 2rem;
+  }
+
+  .stat-cell {
+    background: var(--surface);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .stat-num {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 2rem;
+    font-weight: 900;
+    color: var(--red);
+  }
+
+  .stat-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .about-text {
+    font-size: 1.05rem;
+    color: var(--text-muted);
+    line-height: 1.9;
+  }
+
+  .about-text p + p { margin-top: 1.2rem; }
+
+  .about-text strong {
+    color: var(--text);
+    font-weight: 500;
+  }
+
+  .about-text a {
+    color: var(--teal);
+    text-decoration: none;
+    border-bottom: 1px solid var(--teal-dim);
+  }
+
+  /* ─── FILTERS ─── */
+  .filters-section {
+    padding: 5vh 6vw 2vh;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .filters-label {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .filter-btn {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.82rem;
+    font-weight: 400;
+    padding: 0.5rem 1.25rem;
+    border: 1px solid var(--border);
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .filter-btn:hover { color: var(--text); border-color: var(--text-dim); }
+
+  .filter-btn.active[data-cat="all"]         { background: var(--text);  color: var(--bg); border-color: var(--text); }
+  .filter-btn.active[data-cat="harassment"]  { background: var(--red);   color: white;     border-color: var(--red); }
+  .filter-btn.active[data-cat="hr"]          { background: var(--amber); color: var(--bg); border-color: var(--amber); }
+  .filter-btn.active[data-cat="retaliation"] { background: #9b4dca;      color: white;     border-color: #9b4dca; }
+  .filter-btn.active[data-cat="culture"]     { background: var(--teal);  color: var(--bg); border-color: var(--teal); }
+  .filter-btn.active[data-cat="departure"]   { background: var(--gold);  color: var(--bg); border-color: var(--gold); }
+
+  /* ─── TIMELINE ─── */
+  .timeline-section {
+    padding: 4vh 6vw 10vh;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .timeline-container {
+    position: relative;
+    padding-right: 3rem;
+  }
+
+  .timeline-spine {
+    position: absolute;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: linear-gradient(to bottom, transparent, var(--border) 5%, var(--border) 95%, transparent);
+  }
+
+  .timeline-item {
+    position: relative;
+    margin-bottom: 1.5rem;
+    transition: opacity 0.3s, transform 0.3s;
+  }
+
+  .timeline-item.hidden { display: none; }
+
+  .timeline-dot {
+    position: absolute;
+    right: -3rem;
+    top: 1.4rem;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid;
+    background: var(--bg);
+    transform: translateX(4.5px);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .timeline-item[data-cat="harassment"]  .timeline-dot { border-color: var(--red); }
+  .timeline-item[data-cat="hr"]          .timeline-dot { border-color: var(--amber); }
+  .timeline-item[data-cat="retaliation"] .timeline-dot { border-color: #9b4dca; }
+  .timeline-item[data-cat="culture"]     .timeline-dot { border-color: var(--teal); }
+  .timeline-item[data-cat="departure"]   .timeline-dot { border-color: var(--gold); }
+
+  .timeline-item.open .timeline-dot { transform: translateX(4.5px) scale(1.5); }
+
+  .timeline-item[data-cat="harassment"].open  .timeline-dot { box-shadow: 0 0 12px var(--red); }
+  .timeline-item[data-cat="hr"].open          .timeline-dot { box-shadow: 0 0 12px var(--amber); }
+  .timeline-item[data-cat="retaliation"].open .timeline-dot { box-shadow: 0 0 12px #9b4dca; }
+  .timeline-item[data-cat="culture"].open     .timeline-dot { box-shadow: 0 0 12px var(--teal); }
+  .timeline-item[data-cat="departure"].open   .timeline-dot { box-shadow: 0 0 12px var(--gold); }
+
+  .timeline-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+    overflow: hidden;
+  }
+
+  .timeline-card:hover { background: var(--surface2); }
+
+  .timeline-item[data-cat="harassment"].open  .timeline-card,
+  .timeline-item[data-cat="harassment"]  .timeline-card:hover { border-color: var(--red-dim); }
+  .timeline-item[data-cat="hr"].open          .timeline-card,
+  .timeline-item[data-cat="hr"]          .timeline-card:hover { border-color: var(--amber-dim); }
+  .timeline-item[data-cat="retaliation"].open .timeline-card,
+  .timeline-item[data-cat="retaliation"] .timeline-card:hover { border-color: #5b2d8a; }
+  .timeline-item[data-cat="culture"].open     .timeline-card,
+  .timeline-item[data-cat="culture"]     .timeline-card:hover { border-color: var(--teal-dim); }
+  .timeline-item[data-cat="departure"].open   .timeline-card,
+  .timeline-item[data-cat="departure"]   .timeline-card:hover { border-color: #7a6020; }
+
+  .card-header {
+    padding: 1.25rem 1.5rem;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .card-cat-badge {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.25rem 0.6rem;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .timeline-item[data-cat="harassment"]  .card-cat-badge { background: rgba(232,52,42,0.15);   color: var(--red); }
+  .timeline-item[data-cat="hr"]          .card-cat-badge { background: rgba(212,136,42,0.15);  color: var(--amber); }
+  .timeline-item[data-cat="retaliation"] .card-cat-badge { background: rgba(155,77,202,0.15);  color: #b87de0; }
+  .timeline-item[data-cat="culture"]     .card-cat-badge { background: rgba(42,184,196,0.15);  color: var(--teal); }
+  .timeline-item[data-cat="departure"]   .card-cat-badge { background: rgba(201,168,76,0.15);  color: var(--gold); }
+
+  .card-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  .card-toggle {
+    width: 22px;
+    height: 22px;
+    border: 1px solid var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.3s, border-color 0.2s;
+  }
+
+  .timeline-item.open .card-toggle { transform: rotate(45deg); }
+
+  .card-toggle svg {
+    width: 10px;
+    height: 10px;
+    fill: none;
+    stroke: var(--text-muted);
+    stroke-width: 2;
+  }
+
+  .card-date-tag {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    padding: 0 1.5rem 0.75rem;
+  }
+
+  .card-body {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .timeline-item.open .card-body { max-height: 1200px; }
+
+  .card-body-inner {
+    padding: 1.25rem 1.5rem 1.75rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.98rem;
+    color: var(--text-muted);
+    line-height: 1.9;
+  }
+
+  .card-body-inner p + p { margin-top: 0.9rem; }
+  .card-body-inner strong { color: var(--text); font-weight: 500; }
+
+  .card-body-inner .highlight {
+    display: block;
+    margin-top: 1.25rem;
+    padding: 0.85rem 1rem;
+    background: rgba(255,255,255,0.03);
+    border-right: 3px solid;
+    font-style: italic;
+    font-size: 0.93rem;
+    color: var(--text);
+    line-height: 1.8;
+  }
+
+  .timeline-item[data-cat="harassment"]  .highlight { border-color: var(--red); }
+  .timeline-item[data-cat="hr"]          .highlight { border-color: var(--amber); }
+  .timeline-item[data-cat="retaliation"] .highlight { border-color: #9b4dca; }
+  .timeline-item[data-cat="culture"]     .highlight { border-color: var(--teal); }
+  .timeline-item[data-cat="departure"]   .highlight { border-color: var(--gold); }
+
+  /* ─── OUTCOME ─── */
+  .outcome-section {
+    padding: 8vh 6vw;
+    border-top: 1px solid var(--border);
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6vw;
+  }
+
+  .outcome-label {
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.75rem;
+    color: var(--gold);
+    margin-bottom: 1.5rem;
+  }
+
+  .outcome-title {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.3;
+    margin-bottom: 1.5rem;
+  }
+
+  .outcome-text {
+    font-size: 0.98rem;
+    color: var(--text-muted);
+    line-height: 1.9;
+  }
+
+  .outcome-text p + p { margin-top: 1rem; }
+
+  .impact-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .impact-list li {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+    line-height: 1.7;
+  }
+
+  .impact-list li::before {
+    content: '←';
+    color: var(--gold);
+    font-family: 'Heebo', sans-serif;
+    flex-shrink: 0;
+    margin-top: 0.1rem;
+  }
+
+  .impact-list strong { color: var(--text); }
+
+  /* ─── FOOTER ─── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 3rem 6vw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Heebo', sans-serif;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+
+  footer a { color: var(--teal); text-decoration: none; }
+
+  /* ─── ANIMATIONS ─── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .animate-in {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.5s, transform 0.5s;
+  }
+
+  .animate-in.visible {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 768px) {
+    .about          { grid-template-columns: 1fr; }
+    .outcome-section{ grid-template-columns: 1fr; }
+    .stat-grid      { grid-template-columns: 1fr 1fr; }
+    .card-header    { grid-template-columns: auto 1fr auto; gap: 0.75rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">19 בפברואר 2017 — עדות אישית</div>
+    <h1 class="hero-title">
+      שנה<br><em>מוזרה מאוד</em><br>ב-Uber
+    </h1>
+    <p class="hero-subtitle">
+      חשבון אינטראקטיבי של שלושה עשר החודשים של סוזן פאולר ב-Uber — סיפור של הטרדה מינית, כישלון מוסדי, ואומץ לב לדבר.
+    </p>
+    <div class="hero-course">
+      <span class="course-name">מבוא לניהול משאבי אנוש</span>
+      <span class="course-sep">·</span>
+      <span class="course-author">ד"ר הדס הרמתי</span>
+      <span class="course-sep">·</span>
+      <a class="course-link" href="https://www.susanjfowler.com/blog/2017/2/19/reflecting-on-one-very-strange-year-at-uber" target="_blank">הבלוג המקורי של סוזן פאולר ←</a>
+    </div>
+    <div class="hero-meta">
+      <div class="meta-item">
+        <span class="meta-label">תקופה</span>
+        <span class="meta-value">נוב׳ 2015 – דצמ׳ 2016</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">תפקיד</span>
+        <span class="meta-value">מהנדסת SRE</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">אירועים מתועדים</span>
+        <span class="meta-value">12 נקודות מפתח</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    גללו לחקור
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about">
+  <div>
+    <div class="about-label">מי היא?</div>
+    <h2 class="about-name">סוזן פאולר</h2>
+    <div class="about-role">מהנדסת · סופרת · חושפת שחיתויות</div>
+    <div class="stat-grid">
+      <div class="stat-cell">
+        <span class="stat-num">25%</span>
+        <span class="stat-desc">נשים ב-SRE כשהגיעה</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-num">3%</span>
+        <span class="stat-desc">נשים ב-SRE כשעזבה</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-num">13</span>
+        <span class="stat-desc">חודשים ב-Uber</span>
+      </div>
+      <div class="stat-cell">
+        <span class="stat-num">1</span>
+        <span class="stat-desc">פוסט שינה את עמק הסיליקון</span>
+      </div>
+    </div>
+  </div>
+  <div class="about-text">
+    <p>
+      סוזן פאולר הצטרפה ל-Uber כ<strong>מהנדסת Site Reliability</strong> בנובמבר 2015, נרגשת לעבוד באחת מחברות הטכנולוגיה הנחשקות בעולם. עוד בשבוע הראשון בצוות החדש — הכל השתנה.
+    </p>
+    <p>
+      ב-19 בפברואר 2017 — שבועות ספורים לאחר שעזבה את Uber והצטרפה ל-Stripe — פרסמה פאולר פוסט בבלוג האישי שלה בשם <strong>"Reflecting on one very, very strange year at Uber."</strong> בו תיארה בפרוטרוט ובתיעוד מדוקדק את ההטרדה המינית, כישלונות מחלקת HR, הנקמות, והתרבות הרעילה שחוותה.
+    </p>
+    <p>
+      הפוסט הפך לוויראלי תוך שעות. תוך שבועות, מנכ"ל Uber טראוויס קלניק התפטר. חקירה עצמאית שהוביל פרקליט המדינה לשעבר אריק הולדר המליצה על שינויים מקיפים. עדותה של פאולר הפכה לרגע מכונן של תנועת #MeToo בתעשיית הטכנולוגיה.
+    </p>
+    <p>
+      אומצה — ותיעודה הקפדני — הפכו להם לבלתי אפשרי להתעלם.
+    </p>
+  </div>
+</section>
+
+<!-- FILTERS -->
+<div class="filters-section">
+  <div class="filters-label">סנן לפי קטגוריה</div>
+  <div class="filters">
+    <button class="filter-btn active" data-cat="all">כל האירועים</button>
+    <button class="filter-btn" data-cat="harassment">הטרדה מינית</button>
+    <button class="filter-btn" data-cat="hr">כישלון HR</button>
+    <button class="filter-btn" data-cat="retaliation">נקמה ופגיעה</button>
+    <button class="filter-btn" data-cat="culture">תרבות רעילה</button>
+    <button class="filter-btn" data-cat="departure">עזיבה</button>
+  </div>
+</div>
+
+<!-- TIMELINE -->
+<section class="timeline-section">
+  <div class="timeline-container">
+    <div class="timeline-spine"></div>
+
+    <!-- 01 -->
+    <div class="timeline-item animate-in" data-cat="harassment">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">הטרדה מינית</span>
+          <span class="card-title">היום הראשון — המנהל מנסה לגייס אותה למיטה</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">נובמבר 2015 · יום ראשון בצוות החדש</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>ביום הראשון שלה עם הצוות החדש ב-Uber, שלח לה המנהל הישיר סדרת הודעות במערכת הצ'אט הפנימית של החברה. הוא הסביר שהוא נמצא ב"מערכת יחסים פתוחה" ומחפש נשים לקיים עמן יחסי מין.</p>
+            <p>ההודעות היו מפורשות ובוטות. פאולר זיהתה מיד שמדובר בהטרדה מינית. היא צילמה את שיחות הצ'אט ודיווחה ל-HR עוד באותו יום.</p>
+            <span class="highlight">"היה ברור שהוא מנסה לפתות אותי ליחסי מין, וזה היה כל כך מחוץ לכל גבול עד שמיד צילמתי את הודעות הצ'אט האלה ודיווחתי עליו ל-HR."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="timeline-item animate-in" data-cat="hr">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">כישלון HR</span>
+          <span class="card-title">HR מגינה על "המנהל עם הביצועים הגבוהים" — לא על העובדת</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">נובמבר 2015 · תוך שבוע מההצטרפות</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>HR אישרה שההודעות היו "בלתי הולמות" — ואז הסבירה שלא ייפטרו את המנהל. הוא <strong>מנהל עם ביצועים גבוהים</strong> ומדובר בעבירה ראשונה, הסבירו.</p>
+            <p>פאולר קיבלה שתי אפשרויות: להישאר בצוות ולסכן את עצמה לדירוג ביצועים גרוע מהמטריד — או להעביר עצמה לצוות אחר. נאמר לה שמכיוון שניתנו לה "אפשרויות", כל נזק שיבוא לא ייחשב לנקמה.</p>
+            <span class="highlight">"למעשה אמרו לי שחבל, אבל אם אישאר בצוות יהיה עלי לקבל שלעולם לא יענישו אותו כראוי, ואם אגיש תלונה נוספת עליו — אני אהיה בצרות."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 03 -->
+    <div class="timeline-item animate-in" data-cat="harassment">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">הטרדה מינית</span>
+          <span class="card-title">הדפוס מתגלה — נשים נוספות מספרות</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">סוף 2015 – תחילת 2016 · לאחר ההעברה לצוות חדש</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>לאחר ההעברה לצוות חדש, החלה פאולר להתחבר עם מהנדסות נשים אחרות ב-Uber. היא נדהמה לגלות שנשים מרובות דיווחו על <strong>אותו מנהל בדיוק</strong> על התנהגות דומה — חלקן עוד לפני שפאולר הצטרפה לחברה.</p>
+            <p>למרות הדיווחים החוזרים, HR אמרה לכל אחת מהנשים שמדובר ב"עבירה ראשונה" שלו. כולן קיבלו אותה תשובה: הוא עובד בעל ערך ולתלונה לא יהיה המשך.</p>
+            <p>הדפוס היה שיטתי — לא אירוע בודד. אך התגובה המוסדית הייתה זהה בכל פעם: להגן על המנהל, להעביר את האישה.</p>
+            <span class="highlight">"הפך להיות ברור שגם HR וגם ההנהלה הבכירה שיקרו לגבי היסטוריית ההטרדה המינית שלו ב-Uber."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 04 -->
+    <div class="timeline-item animate-in" data-cat="culture">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">תרבות רעילה</span>
+          <span class="card-title">אחוז הנשים קורס — מ-25% ל-6%</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">2016 · הידרדרות הדרגתית</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>כשפאולר הצטרפה, ארגון ה-SRE שלה היה <strong>מעל 25% נשים</strong> — נתון יוצא דופן לתעשייה. אך ככל שחלפו החודשים, נשים החלו לעזוב בקצב מדאיג.</p>
+            <p>ברחבי הארגון, נשים חוו הטרדות, נחסמו בבקשות העברה, וראו את הקריירות שלהן נעצרות. הסביבה הפכה בלתי אפשרית.</p>
+            <p>כשפאולר ניסתה לעזוב את היחידה, אחוז הנשים כבר צנח לפחות מ-6%. באסיפה כללית, המנהל הציע שהנשים המהנדסות צריכות "להיות מהנדסות טובות יותר."</p>
+            <span class="highlight">"נשים עזבו את הארגון בהמוניהן, ועזיבותיהן הוסוו על ידי גיוס מתמשך של מהנדסים גברים."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 05 -->
+    <div class="timeline-item animate-in" data-cat="culture">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">תרבות רעילה</span>
+          <span class="card-title">פוליטיקה ארגונית — חבלה מבפנים</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">2016 · לאורך כל השנה</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>התרבות הפנימית של Uber הפכה לפוליטית מאוד בכל דרג. פאולר הייתה עדה למנהלים שדנו בגלוי בתוכניותיהם לסלק את הממונים עליהם. מנהל אחד הודה שמכוון עצר מידע עסקי קריטי מעמיתיו כדי לזכות בחסדי ההנהלה הבכירה.</p>
+            <p>פרויקטים הוחלו ונזנחו ללא הרף. יעדי OKR השתנו באופן דרמטי כל כמה שבועות. צוותים עברו ארגון מחדש כל כך תכוף עד שמהנדסים לא ידעו למי הם כפופים.</p>
+            <p>מהנדסות כמו פאולר ניסו לעשות את עבודתן — אך הכאוס הארגוני תוכנן לתגמל תמרון פוליטי, לא מצוינות טכנית.</p>
+            <span class="highlight">"הרגיש כאילו מנהלים מנהלים מלחמות טריטוריאליות זה עם זה, מסתירים משאבים ומידע מצוותים יריבים כדי לנצח בקרבות פוליטיים."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 06 -->
+    <div class="timeline-item animate-in" data-cat="retaliation">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">נקמה ופגיעה</span>
+          <span class="card-title">בקשת ההעברה נחסמת — "בעיות ביצוע בלתי מתועדות"</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">אמצע 2016</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>פאולר ביקשה העברה לצוות אחר. המנהל החדש תמך במהלך. ביקורות הביצוע הרשמיות שלה היו חיוביות עם ציונים גבוהים. על הנייר, היא הייתה מועמדת מצוינת לבקשת ההעברה.</p>
+            <p>אך ההנהלה הבכירה חסמה את ההעברה, בטענה ל<strong>"בעיות ביצוע בלתי מתועדות"</strong>. כשנדרשו לפרטים, טענו תחילה שהיא לא "מספיק טכנית" — טיעון שנזנח מיד כשהרקורד שלה הוכיח ההיפך.</p>
+            <p>לאחר מכן הועלתה טענה מעורפלת על "דברים מחוץ לעבודה או מחייך האישי" — ללא פירוט כלשהו.</p>
+            <span class="highlight">"נאמר לי שיש לי בעיות ביצוע בלתי מתועדות שמעולם לא הודעו לי עליהן, והיה ברור לי שזה ניסיון למנוע ממני לעבור צוות."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 07 -->
+    <div class="timeline-item animate-in" data-cat="retaliation">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">נקמה ופגיעה</span>
+          <span class="card-title">ציון הביצועים שונה באופן רטרואקטיבי</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">סוף 2016</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>לאחר שביקורת הביצועים הרשמית של פאולר הושלמה וציוניה אושרו, חזרה ההנהלה ו<strong>שינתה את ציונה</strong> — לאחר שתקופת הכיול הרשמית נסגרה.</p>
+            <p>הציון המשונה שלל ממנה את הזכאות להעברה. כשעמתו אותה עם כך, ההנהלה טענה שהיא חסרה "מסלול קריירה עולה" — למרות שפרסמה ספר O'Reilly על מיקרו-שירותים מוכנים לייצור והרצתה בכנסים מרכזיים.</p>
+            <p>המניפולציה הייתה מתוזמנת וממוקדת. לא הייתה לה שום הסבר אחר.</p>
+            <span class="highlight">"היה ברור שהביקורת השלילית הייתה מפוברקת — המנהל טען שיש לי 'בעיות ביצוע' שמעולם לא הוזכרו לי בשום ביקורת או פגישה אחד-על-אחד."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 08 -->
+    <div class="timeline-item animate-in" data-cat="retaliation">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">נקמה ופגיעה</span>
+          <span class="card-title">מלגת סטנפורד נשללת ממנה</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">סוף 2016 · בעקבות שינוי הציון</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>ל-Uber היה תכנית שמממנת עובדים ללימודי תואר שני במדעי המחשב בסטנפורד — אך רק לעובדים עם ציוני ביצוע גבוהים מספיק.</p>
+            <p>פאולר אושרה תחת הביקורות המקוריות שלה. היא עמדה בכל התנאים. אך לאחר שציונה הורד רטרואקטיבית, היא <strong>כבר לא הייתה זכאית</strong> למלגה.</p>
+            <p>זו לא הייתה תוצאת לוואי — זה היה עונש. מניפולציית הציון פגעה ישירות בהזדמנות חינוכית שהייתה יכולה לעצב את הקריירה שלה.</p>
+            <span class="highlight">השלכות ביקורת שבויצה הגיעו הרחק מעבר לחסימת העברה — הן פגעו בעתידה.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 09 -->
+    <div class="timeline-item animate-in" data-cat="hr">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">כישלון HR</span>
+          <span class="card-title">פרשת מעיל העור — אפליה גלויה</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">2016</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>הארגון החליט להזמין מעילי עור ממותגים לכל מהנדסי ה-SRE. המהנדסות קיבלו הודעה שהן <strong>לא תקבלנה מעילים</strong>. הנימוק: אין מספיק נשים כדי להצדיק הזמנה נפרדת במחיר הנחה כולל.</p>
+            <p>הנשים הציעו לשלם את ההפרש. ההנהלה סירבה. המנהל טען שזה בכלל לא "שוויוני" — היגיון מעגלי שנמנע מכל הגדרה.</p>
+            <p>זה נראה קטנוני. אך הוא היה סמלי: הדרה מכוונת, גלויה, מזדמנת של הנשים מהזהות והתרבות המשותפת של הצוות.</p>
+            <span class="highlight">"נאמר לנו שהמנהל החליט שלא שווה להשיג לנשים מעילי עור, כי יהיה 'שוויוני' לתת להן פחות ממשהו אם העלות הייתה זהה."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="timeline-item animate-in" data-cat="hr">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">כישלון HR</span>
+          <span class="card-title">פגישת HR שנייה — "את הנושא המשותף"</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">סוף 2016</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>כשפאולר דיווחה על שרשרת הדוא"ל בנושא המעילים, HR זימנה אותה לפגישה. הפעם, נציגת HR הייתה עוינת בגלוי.</p>
+            <p>הנציגה הציעה שפאולר עצמה היא ה<strong>"נושא המשותף"</strong> בכל תלונותיה — רמזה שהיא הבעיה. HR טענה שאין כל תיעוד של האירועים הקודמים שפאולר דיווחה עליהם, למרות שהיה לה תיעוד מלא עם צילומי מסך ומיילים.</p>
+            <p>הנציגה שאלה שאלות פולשניות על מה המהנדסות מדברות ביניהן, שיתפה סיפור שרמז שמינים ואתניות מסוימים מתאימים טבעית לתפקידים שונים, וביקרה את פאולר על שמירת רשומות מייל — אמרה לה שזה "בלתי הולם" לדווח במייל.</p>
+            <span class="highlight">"היא אמרה לי להפסיק לתקשר עם הנשים האחרות ולהפסיק לתעד את האירועים האלה. היה ברור שהיא מנסה להגן על החברה — לא עלי."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="timeline-item animate-in" data-cat="retaliation">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">נקמה ופגיעה</span>
+          <span class="card-title">המנהל מאיים בפיטורים על פנייה ל-HR</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">סוף 2016 · תוך שבוע מפגישת HR</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>תוך ימים ספורים מפגישת HR השנייה, זימן אותה המנהל ואמר לה שהיא <strong>"על קרח דקיק."</strong> הוא הסביר שקליפורניה היא מדינת "at-will employment" ושניתן לפטר אותה אם תפנה ל-HR שוב.</p>
+            <p>פאולר הסבירה לו שמה שהוא מתאר הוא נקמה בלתי חוקית. הוא התעקש שהיא טועה — שהוא מכיר את חוקי העבודה והיא לא.</p>
+            <p>היא דיווחה על האיום הן ל-HR והן למנמ"ט של Uber. שניהם הכירו בכך שהאיום הוא בלתי חוקי. אף אחד לא נקט בפעולה. הנימוק: הוא "מבצע גבוה."</p>
+            <span class="highlight">"אמרתי לו שלאיים לפטר אותי בגלל דיווח על הטרדה מינית הוא בלתי חוקי ויחשב לנקמה. הוא ענה שאני טועה בכך."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 12 -->
+    <div class="timeline-item animate-in" data-cat="departure">
+      <div class="timeline-dot"></div>
+      <div class="timeline-card" onclick="toggleItem(this.parentElement)">
+        <div class="card-header">
+          <span class="card-cat-badge">עזיבה</span>
+          <span class="card-title">היום האחרון — היא עוזבת. ואז מספרת לעולם.</span>
+          <div class="card-toggle"><svg viewBox="0 0 12 12"><line x1="6" y1="1" x2="6" y2="11"/><line x1="1" y1="6" x2="11" y2="6"/></svg></div>
+        </div>
+        <div class="card-date-tag">דצמבר 2016 / 19 בפברואר 2017</div>
+        <div class="card-body">
+          <div class="card-body-inner">
+            <p>פאולר מצאה הצעת עבודה חדשה תוך שבוע. ביום האחרון שלה ב-Uber, הסתכלה על תרשים ה-SRE. מתוך 150+ מהנדסים, רק כ-<strong>3% היו נשים</strong>. היא צפתה במספר זה נופל מ-25% בתוך שלושה עשר חודשים.</p>
+            <p>היא הצטרפה ל-Stripe בינואר 2017. ב-19 בפברואר 2017 פרסמה את עדותה בבלוג האישי שלה. עד שרוב האנשים התעוררו בבוקר ההוא, הפוסט כבר הפך לוויראלי.</p>
+            <p>תוך חודשים: מנכ"ל Uber קלניק התפטר. מנהלים בכירים פוטרו. חקירה עצמאית שהוביל אריק הולדר הפיקה דוח עם 47 המלצות לשינוי תרבות ומשילות. הפוסט הפך לאחד הרגעים המכוננים שהתניע את שיחת #MeToo בתעשיית הטכנולוגיה.</p>
+            <span class="highlight">"אני לא ממש בטוחה מה לחשוב על כל זה, אבל אני יודעת שהיה עלי לספר את הסיפור שלי. אני יודעת שיש אנשים אחרים שחוו דברים כאלה, ואני מקווה שהם יוכלו לספר את סיפוריהם גם."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- OUTCOME -->
+<section class="outcome-section">
+  <div>
+    <div class="outcome-label">מה קרה אחר כך</div>
+    <h2 class="outcome-title">הפוסט שהזיז תעשייה שלמה</h2>
+    <div class="outcome-text">
+      <p>
+        הפוסט של סוזן פאולר לא חשף רק את כישלונותיה של חברה אחת. הוא הפך לזרז לתהיה רחבה יותר על האופן שבו חברות טכנולוגיה מתמודדות — ומסתירות — הטרדה בסביבת העבודה.
+      </p>
+      <p>
+        נכונותה לתעד הכל, לשמור ראיות, ולפרסם את עדותה בדייקנות ובזהירות הפכה אותה לבלתי ניתנת לדחייה. הפרטים היו ספציפיים מדי. הדפוס היה ברור מדי.
+      </p>
+      <p>
+        ספרה, <em>Production-Ready Microservices</em>, ממשיך להיות בשימוש ארגונים הנדסיים ברחבי העולם — תזכורת שהאדם שניסתה Uber לצמצם יצרה עבודה שהתקיימה מעבר לניסיון להשתיקה.
+      </p>
+    </div>
+  </div>
+  <div>
+    <div class="outcome-label">גלי ההדף</div>
+    <ul class="impact-list">
+      <li><strong>טראוויס קלניק התפטר</strong> כמנכ"ל Uber תוך חודשים מפרסום הפוסט.</li>
+      <li><strong>מנהלים בכירים פוטרו</strong> בעקבות חקירת אריק הולדר.</li>
+      <li><strong>דוח הולדר</strong> — 47 המלצות לשינוי תרבות ומשילות ב-Uber.</li>
+      <li><strong>#MeToo האיץ</strong> — עדותה של פאולר צוטטה כנקודת מפנה לתנועה בטק.</li>
+      <li><strong>אישיות השנה — Time 2017</strong> — פאולר מונתה יחד עם "שוברות השתיקה" האחרות.</li>
+      <li><strong>הגנת המלשינים</strong> נבחנה מחדש בכל תעשיית הטכנולוגיה בעקבות המקרה.</li>
+      <li><strong>ספר פורסם</strong> — <em>Whistleblower</em> (2020) תיעד את הסיפור המלא ותוצאותיו.</li>
+      <li><strong>מורשת</strong> — שיטות התיעוד שלה הפכו לדגם לאחרים שמנווטים מצבים דומים.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <span>מבוסס על: <a href="https://www.susanjfowler.com/blog/2017/2/19/reflecting-on-one-very-strange-year-at-uber" target="_blank">susanjfowler.com — "Reflecting on One Very Strange Year at Uber"</a></span>
+  <span>פורסם: 19 בפברואר 2017</span>
+</footer>
+
+<script>
+  function toggleItem(item) {
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.timeline-item.open').forEach(el => el.classList.remove('open'));
+    if (!isOpen) item.classList.add('open');
+  }
+
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.dataset.cat;
+      document.querySelectorAll('.timeline-item').forEach(item => {
+        if (cat === 'all' || item.dataset.cat === cat) {
+          item.classList.remove('hidden');
+        } else {
+          item.classList.add('hidden');
+          item.classList.remove('open');
+        }
+      });
+    });
+  });
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 60);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.animate-in').forEach(el => observer.observe(el));
+</script>
+</body>
+</html>
